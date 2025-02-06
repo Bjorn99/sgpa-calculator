@@ -1,0 +1,21 @@
+{
+  "name": "cgpa-converter",
+  "version": "2.0.0",
+  "description": "A modern CGPA to Percentage converter",
+  "type": "module",
+  "main": "src/js/main.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": ["cgpa", "converter", "education"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "autoprefixer": "^10.4.17",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "vite": "^5.1.0"
+  }
+}

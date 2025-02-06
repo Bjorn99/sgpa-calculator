@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGPA/CGPA Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+</head>
+<body class="bg-gray-100 min-h-screen dark:bg-gray-900 transition-colors duration-300">
+    <!-- Theme Toggle -->
+    <button id="themeToggle" 
+            class="fixed top-6 right-6 p-3 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-300">
+        <svg xmlns="http://www.w3.org/2000/svg" 
+             class="h-8 w-8 hidden dark:block text-yellow-300" 
+             fill="none" 
+             viewBox="0 0 24 24" 
+             stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707" />
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" 
+             class="h-8 w-8 dark:hidden text-gray-700" 
+             fill="none" 
+             viewBox="0 0 24 24" 
+             stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+    </button>
+
+    <div class="container mx-auto px-6 py-12 max-w-3xl">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden transition-colors duration-300">
+            <!-- Header -->
+            <div class="p-6 border-b dark:border-gray-700">
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">SGPA/CGPA Calculator</h1>
+                <p class="mt-2 text-gray-600 dark:text-gray-400">Calculate as per credit system: SGPA = Σ(Ci × Gi) / ΣCi</p>
+            </div>
+
+            <!-- Semester Navigation -->
+            <div class="flex justify-between items-center px-6 py-4 bg-gray-50 dark:bg-gray-700">
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                    Semester <span id="currentSemester">1</span>
+                </h3>
+                <div class="flex gap-4">
+                    <button id="prevSemester" 
+                            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm hidden">
+                        Previous Semester
+                    </button>
+                    <button id="nextSemester" 
+                            class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm">
+                        Next Semester
+                    </button>
+                </div>
+            </div>
+
+            <!-- Course Inputs -->
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h4 class="text-base font-medium text-gray-700 dark:text-gray-300">Courses</h4>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Enter course details for this semester</p>
+                    </div>
+                    <button id="addCourse" 
+                            class="px-4 py-2 text-sm bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors">
+                        Add Course
+                    </button>
+                </div>
+
+                <!-- Course List -->
+                <div id="coursesContainer" class="space-y-4">
+                    <div class="grid grid-cols-12 gap-4 text-sm text-gray-500 dark:text-gray-400 pb-2">
+                        <div class="col-span-6">Course Name</div>
+                        <div class="col-span-2">Credits</div>
+                        <div class="col-span-3">Grade Points</div>
+                        <div class="col-span-1"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div class="p-6 bg-gray-50 dark:bg-gray-700 space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- SGPA Card -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4">
+                        <div class="text-sm text-gray-500 dark:text-gray-400">Semester GPA (SGPA)</div>
+                        <div class="flex items-baseline gap-2">
+                            <div id="sgpaResult" class="text-2xl font-medium text-gray-900 dark:text-gray-100">-</div>
+                            <div id="sgpaPercentage" class="text-sm text-gray-500 dark:text-gray-400">(-)</div>
+                        </div>
+                    </div>
+                    <!-- CGPA Card -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4">
+                        <div class="text-sm text-gray-500 dark:text-gray-400">Cumulative GPA (CGPA)</div>
+                        <div class="flex items-baseline gap-2">
+                            <div id="cgpaResult" class="text-2xl font-medium text-gray-900 dark:text-gray-100">-</div>
+                            <div id="cgpaPercentage" class="text-sm text-gray-500 dark:text-gray-400">(-)</div>
+                        </div>
+                        <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                            Based on <span id="semesterCount">1</span> semester(s)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <!-- Formula Reference -->
+        <div class="mt-6 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">Formula Reference</h3>
+            <div class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                <p><strong>SGPA</strong> = Σ(Ci × Gi) / ΣCi</p>
+                <p>Where:</p>
+                <ul class="list-disc list-inside pl-4">
+                    <li>Ci = Credits of ith course</li>
+                    <li>Gi = Grade points obtained in ith course</li>
+                </ul>
+                <p class="mt-4"><strong>CGPA</strong> = Σ(Si × Ci) / ΣCi</p>
+                <p>Where:</p>
+                <ul class="list-disc list-inside pl-4">
+                    <li>Si = SGPA of ith semester</li>
+                    <li>Ci = Total credits in ith semester</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="p-6 bg-gray-50 dark:bg-gray-700 space-y-4">
+            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Grading Scale</h3>
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-4">
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between py-2 border-b dark:border-gray-700">
+                        <span class="font-medium">O (Outstanding)</span>
+                        <span class="text-gray-600 dark:text-gray-400">10</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2 border-b dark:border-gray-700">
+                        <span class="font-medium">A+ (Excellent)</span>
+                        <span class="text-gray-600 dark:text-gray-400">9</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2 border-b dark:border-gray-700">
+                        <span class="font-medium">A (Very Good)</span>
+                        <span class="text-gray-600 dark:text-gray-400">8</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2 border-b dark:border-gray-700">
+                        <span class="font-medium">B+ (Good)</span>
+                        <span class="text-gray-600 dark:text-gray-400">7</span>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between py-2 border-b dark:border-gray-700">
+                        <span class="font-medium">B (Above Average)</span>
+                        <span class="text-gray-600 dark:text-gray-400">6</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2 border-b dark:border-gray-700">
+                        <span class="font-medium">C (Average)</span>
+                        <span class="text-gray-600 dark:text-gray-400">5</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2 border-b dark:border-gray-700">
+                        <span class="font-medium">P (Pass)</span>
+                        <span class="text-gray-600 dark:text-gray-400">4</span>
+                    </div>
+                    <div class="flex items-center justify-between py-2 border-b dark:border-gray-700">
+                        <span class="font-medium text-red-500">F (Fail)</span>
+                        <span class="text-gray-600 dark:text-gray-400">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <script type="module" src="./js/main.js"></script>
+</body>
+</html>

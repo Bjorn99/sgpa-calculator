@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .input-field {
+        @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent;
+    }
+
+    .btn-primary {
+        @apply px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors;
+    }
+
+    .btn-secondary {
+        @apply px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors;
+    }
+
+    .result-display {
+        @apply w-full px-4 py-2 bg-gray-100 rounded-lg font-medium;
+    }
+}
+
+/* Input number spinner removal */
+@layer utilities {
+    input[type='number']::-webkit-outer-spin-button,
+    input[type='number']::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type='number'] {
+        -moz-appearance: textfield;
+    }
+}
