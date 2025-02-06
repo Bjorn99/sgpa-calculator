@@ -1,4 +1,5 @@
 import { calculateSGPA, calculateCGPA, toPercentage, formatPercentage } from './modules/converter.js';
+import { sanitizeInput, validateNumber, sanitizeCourseData } from './modules/validation.js';
 
 let semesters = [{
     courses: [],
@@ -6,8 +7,21 @@ let semesters = [{
 }];
 let currentSemesterIndex = 0;
 
+function loadSemesterData() {
+    const savedData = localStorage.getItem('semesterData');
+    if (savedData) {
+        semesters = JSON.parse(savedData);
+        updateSemesterView();
+    }
+}
+
+function persistSemesterData() {
+    localStorage.setItem('semesterData', JSON.stringify(semesters));
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
+    loadSemesterData();
     addInitialCourse();
     initializeTheme();
 });
@@ -108,13 +122,16 @@ function saveSemesterData() {
     const courses = [];
     document.querySelectorAll('.course-row').forEach(row => {
         courses.push({
-            name: row.querySelector('input[type="text"]').value,
-            credits: parseFloat(row.querySelector('.course-credits').value) || 0,
-            gradePoint: parseFloat(row.querySelector('.course-grade').value) || 0
+            name: sanitizeInput(row.querySelector('input[type="text"]').value),
+            credits: validateNumber(row.querySelector('.course-credits').value) ? 
+                    parseFloat(row.querySelector('.course-credits').value) : 0,
+            gradePoint: validateNumber(row.querySelector('.course-grade').value) ? 
+                       parseFloat(row.querySelector('.course-grade').value) : 0
         });
     });
-    semesters[currentSemesterIndex].courses = courses;
+    semesters[currentSemesterIndex].courses = sanitizeCourseData(courses);
     semesters[currentSemesterIndex].sgpa = calculateSGPA(courses);
+    persistSemesterData();
 }
 
 function updateSemesterView() {
@@ -159,12 +176,14 @@ function handleCourseRemoval(event) {
         courseRow.remove();
         updateRemoveButtons();
         updateResults();
+        persistSemesterData();
     }
 }
 
 function handleInputChange() {
     saveSemesterData();
     updateResults();
+    persistSemesterData();
 }
 
 function updateResults() {

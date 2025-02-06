@@ -88,3 +88,20 @@ export const formatNumber = (value, decimals = 2) => {
     const num = parseFloat(value);
     return isNaN(num) ? '0' : num.toFixed(decimals);
 };
+
+export function sanitizeInput(input) {
+    return input.replace(/[<>]/g, '');
+}
+
+export function validateNumber(num) {
+    return !isNaN(num) && isFinite(num);
+}
+
+export function sanitizeCourseData(data) {
+    if (!Array.isArray(data)) return [];
+    return data.map(item => ({
+        name: sanitizeInput(item.name || ''),
+        credits: validateNumber(item.credits) ? item.credits : 0,
+        gradePoint: validateNumber(item.gradePoint) ? item.gradePoint : 0
+    }));
+}

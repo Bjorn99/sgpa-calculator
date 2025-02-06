@@ -1,6 +1,6 @@
 export default {
     root: 'src',
-    base: './',
+    base: '/sgpa-calculator/',
     build: {
       outDir: '../dist',
       emptyOutDir: true
