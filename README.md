@@ -63,7 +63,7 @@ Found a bug? Have an idea? Join our fellowship!
 
 ## 📜 License
 
-MIT License - Free as the peoples of Middle-earth
+GNU Affero General Public License v3.0 - Free as the peoples of Middle-earth
 
 ---
 
