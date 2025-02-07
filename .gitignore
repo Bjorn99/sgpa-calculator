@@ -1,6 +1,5 @@
 # Dependencies
 node_modules/
-/node_modules
 /.pnp
 .pnp.js
 
@@ -8,13 +7,14 @@ node_modules/
 /dist
 /build
 /public/build
+/out
 
 # Vite specific
 .vite/
 *.local
 
 # Environment files
-.env
+.env*
 .env.local
 .env.development.local
 .env.test.local
@@ -40,38 +40,15 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Coverage directory used by tools like istanbul
+# Testing and coverage
 coverage
 
-# Optional npm cache directory
+# Cache directories
 .npm
-
-# Optional eslint cache
 .eslintcache
-
-# Optional REPL history
+.netlify/cache/
 .node_repl_history
 
-# Output of 'npm pack'
+# Package files
 *.tgz
-
-# Yarn Integrity file
 .yarn-integrity
-
-# Netlify local development files
-# .netlify/
-# netlify.toml
-
-# Netlify build cache
-.netlify/cache/
-
-# Local environment files
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Netlify build output (optional, depending on your project)
-/dist
-/build
-/out
