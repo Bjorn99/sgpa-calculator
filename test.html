@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reset Button Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-md space-y-4">
+        <input type="text" 
+               id="testInput" 
+               class="w-full p-2 border rounded"
+               placeholder="Type something...">
+        
+        <button id="resetButton"
+                class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+            Reset
+        </button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const input = document.getElementById('testInput');
+            const resetBtn = document.getElementById('resetButton');
+
+            // Save input value to localStorage on change
+            input.addEventListener('input', () => {
+                localStorage.setItem('testValue', input.value);
+                console.log('Value saved:', input.value);
+            });
+
+            // Load saved value on page load
+            const savedValue = localStorage.getItem('testValue');
+            if (savedValue) {
+                input.value = savedValue;
+                console.log('Value loaded:', savedValue);
+            }
+
+            // Reset functionality
+            resetBtn.addEventListener('click', () => {
+                console.log('Reset clicked');
+                if (confirm('Are you sure you want to reset?')) {
+                    input.value = '';
+                    localStorage.removeItem('testValue');
+                    console.log('Reset complete');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

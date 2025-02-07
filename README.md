@@ -30,7 +30,7 @@ Primarily crafted for the lands of:
 
 ```bash
 # Clone this repository like borrowing the One Ring
-git clone https://github.com/yourusername/sgpa-calculator.git
+git clone https://github.com/Bjorn99/sgpa-calculator.git
 
 # Enter the realm
 cd sgpa-calculator
