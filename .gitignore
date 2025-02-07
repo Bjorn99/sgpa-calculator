@@ -59,8 +59,8 @@ coverage
 .yarn-integrity
 
 # Netlify local development files
-.netlify/
-netlify.toml
+# .netlify/
+# netlify.toml
 
 # Netlify build cache
 .netlify/cache/
